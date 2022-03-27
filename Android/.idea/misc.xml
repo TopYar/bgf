@@ -3,7 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable-v24/ronded_layout_bg.xml" value="0.208" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_back.xml" value="0.142" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_dice.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_launcher_background.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_noun_back_26915_ffffff_cropped.xml" value="0.142" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_noun_dice_957002_ffffff.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_noun_dice_957002_ffffff_cropped.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_add_circle.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_home.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_notifications.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_person.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_search.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_confirmation_code.xml" value="0.264" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_log_in.xml" value="0.264" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_main.xml" value="0.1453804347826087" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_password_recovery.xml" value="0.264" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_splash.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_add.xml" value="0.16927083333333334" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_home.xml" value="0.16927083333333334" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_notifications.xml" value="0.16927083333333334" />
@@ -18,5 +36,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.12" />
+      </ProjectState>
+    </option>
   </component>
 </project>

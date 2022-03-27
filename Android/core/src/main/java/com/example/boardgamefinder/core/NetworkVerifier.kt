@@ -5,8 +5,12 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 
+/**
+ * verifies internet connection
+ */
 object NetworkVerifier {
     @Suppress("DEPRECATION")
+    // used for different android versions
     fun isInternetAvailable(context: Context): Boolean {
         var result = false
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?

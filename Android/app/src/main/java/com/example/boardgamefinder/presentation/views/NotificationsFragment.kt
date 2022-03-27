@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.boardgamefinder.R
 
+/**
+ * Fragment for notification tab (can be messages in later version)
+ */
 internal class NotificationsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

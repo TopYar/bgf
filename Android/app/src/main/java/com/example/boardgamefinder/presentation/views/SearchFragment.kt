@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.boardgamefinder.R
 
+/**
+ * Fragment for search (map and list) tab
+ */
 internal class SearchFragment : Fragment() {
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

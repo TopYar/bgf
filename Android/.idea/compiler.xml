@@ -5,6 +5,7 @@
       <module name="BoardGameFinder.app" target="11" />
       <module name="BoardGameFinder.core" target="11" />
       <module name="BoardGameFinder.data" target="11" />
+      <module name="BoardGameFinder.Mycore" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import com.example.boardgamefinder.R
 import com.example.boardgamefinder.databinding.ActivityMainBinding
 
-
+/**
+ * Activity for holding all app tabs
+ */
 internal class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
@@ -25,7 +27,7 @@ internal class MainActivity : AppCompatActivity() {
                     replaceFragment(SearchFragment())
                 }
                 R.id.nav_add -> {
-                    replaceFragment(AddFragment())
+                    replaceFragment(NewEventFragment())
                 }
                 R.id.nav_notifications -> {
                     replaceFragment(NotificationsFragment())
@@ -38,6 +40,7 @@ internal class MainActivity : AppCompatActivity() {
         }
     }
 
+    // used for switching between fragments in main frame
     private fun replaceFragment(fragment: Fragment) {
         // open fragment
         supportFragmentManager.beginTransaction()

@@ -9,6 +9,9 @@ import androidx.fragment.app.viewModels
 import com.example.boardgamefinder.databinding.FragmentProfileBinding
 import com.example.boardgamefinder.presentation.viewModels.ProfileViewModel
 
+/**
+ * Fragment for profile tab
+ */
 internal class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -25,13 +28,14 @@ internal class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.getBreedsButton.setOnClickListener {
+        // ToDo remove example
+        /*binding.getBreedsButton.setOnClickListener {
             profileViewModel.getBreeds()
         }
 
         profileViewModel.breedsCount.observe(viewLifecycleOwner) {
             binding.countBreedsTextView.text = it.toString()
-        }
+        }*/
     }
 
     override fun onDestroy() {

@@ -5,28 +5,32 @@ import com.example.boardgamefinder.domain.repository.UserRepository
 import kotlinx.coroutines.*
 import retrofit2.Response
 
+/**
+ * Implementation for user repository to provide operations with user data
+ */
 class UserRepository : UserRepository {
     override fun register(credentials: UserCredentials): Result<Boolean> {
         TODO("Not yet implemented")
     }
 
+    // ToDo remove example
     override suspend fun getBreeds(): Result<List<String>> {
         var result: Result<List<String>>?
 
         withContext(Dispatchers.IO) {
             val response: Response<List<String>>
+
             try {
                 response = ApiClient.instance.getBreeds()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 result = Result.failure(DataException.InternetException())
                 return@withContext
             }
-            if (response.isSuccessful && response.body() != null) {
-                result = Result.success(response.body()!!)
-                return@withContext
-            }
 
-            result = Result.failure(DataException.responseCodeToException(response.code()))
+            result = if (response.isSuccessful && response.body() != null)
+                Result.success(response.body()!!)
+            else
+                Result.failure(DataException.responseCodeToException(response.code()))
         }
 
         return result!!

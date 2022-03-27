@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="InternetException">Something went wrong. Please, check the Internet connection.</string>
+    <string name="Response500">Something went wrong.</string>
+    <string name="UnknownServerError">Something went wrong.</string>
+    <string name="AnotherError">Error.</string>
+</resources>

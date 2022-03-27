@@ -2,6 +2,7 @@ package com.example.boardgamefinder.domain.usecase
 
 import com.example.boardgamefinder.domain.repository.UserRepository
 
+// ToDo remove example
 class GetBreedsUseCase(
     private val userRepository: UserRepository
 ) {

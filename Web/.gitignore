@@ -10,3 +10,10 @@ Thumbs.db
 # bgf-dev #
 src/main
 .envrc
+
+# bgf-dev ignore toml configs except for examples
+src/configs/*.toml
+!src/configs/example.toml
+.pm2
+nginx/*.conf
+!nginx/example.conf

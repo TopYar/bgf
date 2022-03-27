@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN confirmed_email bool not null default false

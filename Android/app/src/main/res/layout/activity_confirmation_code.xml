@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.views.ConfirmationCodeActivity">
+    tools:context=".presentation.views.activities.ConfirmationCodeActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
@@ -97,11 +97,11 @@
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <ImageButton
-        android:padding="10dp"
+        android:padding="12dp"
         android:contentDescription="@string/back_icon"
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_back"
@@ -254,6 +254,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:layout_marginTop="5dp"
             android:id="@+id/resendCode"
             android:layout_width="match_parent"
@@ -263,6 +264,8 @@
             style="@style/TextAppearance.MaterialComponents.Caption"/>
 
         <TextView
+            android:visibility="gone"
+
             android:layout_marginTop="5dp"
             android:id="@+id/nextResend"
             android:layout_width="match_parent"

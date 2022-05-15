@@ -1,45 +1,343 @@
 package routers
 
 import (
+	"bgf/internal/app/models"
+	"bgf/internal/app/models/requestDTO"
+	responseDTO "bgf/internal/app/models/responsesDTO"
+	"bgf/internal/app/store"
 	"bgf/internal/app/store/sqlstore"
-	"github.com/gorilla/mux"
-	"github.com/sirupsen/logrus"
+	"bgf/utils/ctxkey"
+	"encoding/json"
+	"errors"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
+)
+
+var (
+	errEventIdRequired = errors.New("'eventId' is required query parameter")
+	errEventIdInvalid  = errors.New("'eventId' is invalid format. Int expected")
 )
 
 type eventRouter struct {
-	router *mux.Router
-	logger *logrus.Logger
-	store  *sqlstore.Store
+	router    *mux.Router
+	store     *sqlstore.Store
+	responder HttpController
 }
 
-func NewEventRouter(router *mux.Router, logger *logrus.Logger, store *sqlstore.Store) BaseRouter {
-	userrouter := &eventRouter{
-		router: router,
-		logger: logger,
-		store:  store,
+func NewEventRouter(router *mux.Router, store *sqlstore.Store, responder HttpController) BaseRouter {
+	r := &eventRouter{
+		router:    router,
+		store:     store,
+		responder: responder,
 	}
 
-	userrouter.ConfigureRouter()
+	r.ConfigureRouter()
 
-	return userrouter
+	return r
 }
 
-func (self *eventRouter) ConfigureRouter() {
-	self.router.HandleFunc("/", self.handleEventsGet()).Methods("GET")
+func (r *eventRouter) ConfigureRouter() {
+	r.router.Use(r.responder.GetAuthorizeMw(true, "access"))
+	r.router.HandleFunc("", r.handleEventsGet()).Methods("GET")
+	r.router.HandleFunc("/visitors", r.handleEventsGetVisitors()).Methods("GET")
+	r.router.HandleFunc("", r.handleEventCreate()).Methods("POST")
+	r.router.HandleFunc("/likes", r.handleEventAddLike()).Methods("POST")
+	r.router.HandleFunc("/likes", r.handleEventRemoveLike()).Methods("DELETE")
+	r.router.HandleFunc("/participate", r.handleMakeParticipation()).Methods("POST")
+	r.router.HandleFunc("/participate", r.handleRemoveParticipation()).Methods("DELETE")
+
+	mr := r.router.PathPrefix("/my").Subrouter()
+	mr.HandleFunc("/created", r.handleEventsGetCreated()).Methods("GET")
+	mr.HandleFunc("/liked", r.handleEventsGetLiked()).Methods("GET")
+	mr.HandleFunc("/participated", r.handleEventsGetParticipated()).Methods("GET")
+}
+
+func (router *eventRouter) handleEventsGetVisitors() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()["eventId"]
+
+		if len(query) == 0 {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdRequired)
+			return
+		}
+
+		eventId, err := strconv.Atoi(query[0])
+
+		if err != nil {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdInvalid)
+			return
+		}
+
+		reqDTO := &requestDTO.EventIdDTO{EventId: eventId}
+
+		users, err := router.store.EventsRepo().GetVisitors(reqDTO.EventId)
+		if err != nil {
+			router.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		router.responder.Respond(w, r, http.StatusOK, users)
+	}
 }
 
 func (self *eventRouter) handleEventsGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusBadRequest)
+		query := r.URL.Query()["eventId"]
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
 
-		w.Header().Set("Content-Type", "application/json")
-		//		w.Write([]byte(`{ "success": false,
-		//"result": [{"id":1,"title":"Star wars","imageUrl":"http://ij.je/public/img/screenshots/Screenshot_151.png","date":"01.04.2022T12:00:00Z","tags":[ { "id": 0, "title": "mario" }, { "id": 1, "title": "hello" }, { "id": 2, "title": "it's me'" }],"limit":7,"visitorsCount":5, "likes": 3, "subscriptionStatus":"accepted","liked":true,"locationShort":"Москва, Россия","distance":5000,"creator":{"id":0,"nickname":"Лупа-сюпа","imageUrl":"https://ij.je/public/img/tg.png"}},{"id":2,"title":"Star trek","imageUrl":"http://ij.je/public/img/screenshots/Screenshot_149.png","date":"02.04.2022T12:00:00Z","tags":[ { "id": 3, "title": "let's" }, { "id": 4, "title": "play" }, { "id": 5, "title": "some games" }, { "id": 9, "title": "unknown" }, { "id": 10, "title": "tag" }],"limit":9,"visitorsCount":9,"likes": 4, "subscriptionStatus":"requested","liked":true,"locationShort":"Москва, Россия","distance":5100,"creator":{"id":1,"nickname":"Тиранозавр","imageUrl":"https://ij.je/public/img/wa.png"}},{"id":3,"title":"Бамблби","imageUrl":"http://ij.je/public/img/screenshots/Screenshot_150.png","date":"03.04.2022T12:00:00Z","tags":[ { "id": 6, "title": "wow" }, { "id": 6, "title": "wow" }, { "id": 7, "title": "qqq" }, { "id": 8, "title": "qqq" }],"limit":7,"visitorsCount":0,"likes": 2, "subscriptionStatus":"not_submitted","liked":false,"locationShort":"Москва, Россия","distance":5200,"creator":{"id":2,"nickname":"Rocky Balboa","imageUrl":"https://ij.je/public/img/vk.png"}}],
-		//"error": { "msg": "wtf", "code": 10001 } }`))
+		if len(query) != 0 {
+			eventId, err := strconv.Atoi(query[0])
+			if err != nil {
+				self.responder.Error(w, r, http.StatusBadRequest, errEventIdInvalid)
+				return
+			}
 
-		w.Write([]byte(`{ "success": false, 
-"result": null,
-"error": { "msg": "wtf", "code": 10001 } }`))
+			reqDTO := &requestDTO.EventIdDTO{EventId: eventId}
+
+			event, err := self.store.EventsRepo().GetOne(user.Id, reqDTO.EventId)
+			if err != nil {
+				self.responder.Error(w, r, http.StatusBadRequest, err)
+				return
+			}
+
+			self.responder.Respond(w, r, http.StatusOK, event)
+			return
+		}
+
+		page := &requestDTO.PageDTO{
+			Limit:  20,
+			Offset: 0,
+		}
+		if err := schema.NewDecoder().Decode(page, r.URL.Query()); err != nil {
+			self.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		events, err := self.store.EventsRepo().Get(user.Id, page.Offset, page.Limit)
+		if err != nil {
+			self.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		response := &responseDTO.PageDTO{}
+		response.Page = *page
+		response.Values = events
+
+		self.responder.Respond(w, r, http.StatusOK, response.Values)
+	}
+}
+
+func (router *eventRouter) handleEventCreate() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		requestDTO := &requestDTO.CreateEventDTO{}
+		if err := json.NewDecoder(r.Body).Decode(requestDTO); err != nil {
+			router.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		if err := requestDTO.Validate(); err != nil {
+			router.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
+		if err := router.store.EventsRepo().Create(user.Id, requestDTO); err != nil {
+			router.responder.Error(w, r, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		router.responder.Respond(w, r, http.StatusCreated, requestDTO.Id)
+	}
+}
+
+func (self *eventRouter) handleEventsGetCreated() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		page := &requestDTO.PageDTO{
+			Limit: 20,
+		}
+		if err := schema.NewDecoder().Decode(page, r.URL.Query()); err != nil {
+			self.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
+		events, err := self.store.EventsRepo().GetCreated(user.Id, page.Offset, page.Limit)
+		if err != nil {
+			self.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		response := &responseDTO.PageDTO{}
+		response.Page = *page
+		response.Values = events
+
+		self.responder.Respond(w, r, http.StatusOK, response.Values)
+	}
+}
+
+func (self *eventRouter) handleEventsGetLiked() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		page := &requestDTO.PageDTO{}
+		if err := schema.NewDecoder().Decode(page, r.URL.Query()); err != nil {
+			self.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
+		events, err := self.store.EventsRepo().GetLiked(user.Id, page.Offset, page.Limit)
+		if err != nil {
+			self.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		response := &responseDTO.PageDTO{}
+		response.Page = *page
+		response.Values = events
+
+		self.responder.Respond(w, r, http.StatusOK, response)
+	}
+}
+
+func (self *eventRouter) handleEventsGetParticipated() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		page := &requestDTO.PageDTO{}
+		if err := schema.NewDecoder().Decode(page, r.URL.Query()); err != nil {
+			self.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
+		events, err := self.store.EventsRepo().GetParticipated(user.Id, page.Offset, page.Limit)
+		if err != nil {
+			self.responder.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		response := &responseDTO.PageDTO{}
+		response.Page = *page
+		response.Values = events
+
+		self.responder.Respond(w, r, http.StatusOK, response)
+	}
+}
+
+func (router *eventRouter) handleEventAddLike() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()["eventId"]
+
+		if len(query) == 0 {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdRequired)
+			return
+		}
+
+		eventId, err := strconv.Atoi(query[0])
+
+		if err != nil {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdInvalid)
+			return
+		}
+
+		reqDTO := &requestDTO.EventIdDTO{EventId: eventId}
+
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
+		if err := router.store.EventsLikesRepo().LikeEvent(reqDTO.EventId, user.Id); err != nil {
+			router.responder.Error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		router.responder.Respond(w, r, http.StatusOK, nil)
+	}
+}
+
+func (router *eventRouter) handleEventRemoveLike() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()["eventId"]
+
+		if len(query) == 0 {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdRequired)
+			return
+		}
+
+		eventId, err := strconv.Atoi(query[0])
+
+		if err != nil {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdInvalid)
+			return
+		}
+
+		reqDTO := &requestDTO.EventIdDTO{EventId: eventId}
+
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
+		if err := router.store.EventsLikesRepo().RemoveLikeEvent(reqDTO.EventId, user.Id); err != nil {
+			if err == store.ErrRecordNotFound {
+				router.responder.Error(w, r, http.StatusBadRequest, err)
+			} else {
+				router.responder.Error(w, r, http.StatusInternalServerError, err)
+			}
+			return
+		}
+
+		router.responder.Respond(w, r, http.StatusOK, nil)
+	}
+}
+
+func (router *eventRouter) handleMakeParticipation() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()["eventId"]
+
+		if len(query) == 0 {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdRequired)
+			return
+		}
+
+		eventId, err := strconv.Atoi(query[0])
+
+		if err != nil {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdInvalid)
+			return
+		}
+
+		reqDTO := &requestDTO.EventIdDTO{EventId: eventId}
+
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
+		if err := router.store.EventsParticipationRepo().MakeParticipationInEvent(reqDTO.EventId, user.Id); err != nil {
+			router.responder.Error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		router.responder.Respond(w, r, http.StatusOK, "accepted")
+	}
+}
+
+func (router *eventRouter) handleRemoveParticipation() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()["eventId"]
+
+		if len(query) == 0 {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdRequired)
+			return
+		}
+
+		eventId, err := strconv.Atoi(query[0])
+
+		if err != nil {
+			router.responder.Error(w, r, http.StatusBadRequest, errEventIdInvalid)
+			return
+		}
+
+		reqDTO := &requestDTO.EventIdDTO{EventId: eventId}
+
+		user := r.Context().Value(ctxkey.CtxUser).(*models.User)
+		if err := router.store.EventsParticipationRepo().RemoveParticipationInEvent(reqDTO.EventId, user.Id); err != nil {
+			router.responder.Error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		router.responder.Respond(w, r, http.StatusOK, nil)
 	}
 }

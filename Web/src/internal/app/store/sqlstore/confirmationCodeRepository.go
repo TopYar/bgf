@@ -1,7 +1,7 @@
 package sqlstore
 
 import (
-	"bgf/internal/app/model"
+	"bgf/internal/app/models"
 	"bgf/internal/app/store"
 	"database/sql"
 )
@@ -11,7 +11,7 @@ type ConfirmationCodeRepository struct {
 }
 
 // Create code
-func (self *ConfirmationCodeRepository) Create(code *model.ConfirmationCode) error {
+func (self *ConfirmationCodeRepository) Create(code *models.ConfirmationCode) error {
 	return self.store.db.QueryRow(
 		"INSERT INTO confirmation_codes (code, user_id, expires_at) VALUES ($1, $2, $3) RETURNING id",
 		code.Code,
@@ -21,8 +21,8 @@ func (self *ConfirmationCodeRepository) Create(code *model.ConfirmationCode) err
 }
 
 // Search user by Id
-func (self *ConfirmationCodeRepository) FindByUserId(userId string) (*model.ConfirmationCode, error) {
-	code := &model.ConfirmationCode{}
+func (self *ConfirmationCodeRepository) FindByUserId(userId int) (*models.ConfirmationCode, error) {
+	code := &models.ConfirmationCode{}
 	if err := self.store.db.QueryRow(
 		"SELECT id, code, user_id, expires_at FROM confirmation_codes WHERE user_id = $1",
 		userId,
@@ -42,15 +42,15 @@ func (self *ConfirmationCodeRepository) FindByUserId(userId string) (*model.Conf
 }
 
 // Delete all user codes
-func (self *ConfirmationCodeRepository) DeleteAllUserCodes(userId string) (interface{}, error) {
+func (self *ConfirmationCodeRepository) DeleteAllUserCodes(userId int) error {
 	Row := self.store.db.QueryRow(
 		"DELETE FROM confirmation_codes WHERE user_id = $1",
 		userId,
 	)
 
 	if Row.Err() != nil {
-		return nil, Row.Err()
+		return Row.Err()
 	}
 
-	return nil, nil
+	return nil
 }

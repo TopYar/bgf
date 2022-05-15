@@ -1,0 +1,1 @@
+DROP FUNCTION unsubscribe_from_user (integer, integer);

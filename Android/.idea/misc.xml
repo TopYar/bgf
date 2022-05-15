@@ -3,12 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable-v23/ic_date_small.xml" value="0.217" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.216" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable-v24/ronded_layout_bg.xml" value="0.208" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/bottom_sheet_bg.xml" value="0.227" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_back.xml" value="0.142" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_date.xml" value="0.101" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_date_small.xml" value="0.217" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_dice.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_dice_primary.xml" value="0.106" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_launcher_background.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_marker.xml" value="0.133" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_marker_dice.xml" value="0.133" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_marker_primary.xml" value="0.106" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_noun_back_26915_ffffff_cropped.xml" value="0.142" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_noun_date_1360191_ffffff.xml" value="0.217" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_noun_dice_957002_ffffff.xml" value="0.216" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_noun_dice_957002_ffffff_cropped.xml" value="0.216" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_add_circle.xml" value="0.216" />
@@ -16,18 +25,32 @@
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_notifications.xml" value="0.216" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_person.xml" value="0.216" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_outline_search.xml" value="0.216" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/ic_time.xml" value="0.101" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/drawable/text_over_image_bg.xml" value="0.2095" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_confirmation_code.xml" value="0.264" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_log_in.xml" value="0.264" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_main.xml" value="0.1453804347826087" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_password_recovery.xml" value="0.264" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_splash.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_add.xml" value="0.16927083333333334" />
-        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_home.xml" value="0.16927083333333334" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/activity_welcome.xml" value="0.25025641025641027" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/event_bottom_sheet.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/event_raw_object.xml" value="0.264" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/event_short_raw_object.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_add.xml" value="0.264" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_event_details.xml" value="0.264" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_event_memebers.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_home.xml" value="0.264" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_my_events.xml" value="0.264" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_notifications.xml" value="0.16927083333333334" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/fragment_search.xml" value="0.20677083333333332" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/layout/member_raw_object.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/menu/bottom_navigation.xml" value="0.2109375" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.155" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/core/src/main/res/drawable/ic_dice.xml" value="0.133" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/core/src/main/res/drawable/ic_marker.xml" value="0.133" />
+        <entry key="..\:/Users/narkada/AndroidStudioProjects/BoardGameFinder/core/src/main/res/drawable/ic_marker_dice.xml" value="0.133" />
       </map>
     </option>
   </component>
@@ -40,7 +63,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.12" />
+        <option name="scale" value="0.4" />
       </ProjectState>
     </option>
   </component>

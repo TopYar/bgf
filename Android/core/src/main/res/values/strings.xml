@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="InternetException">Something went wrong. Please, check the Internet connection.</string>
+    <string name="Response422">Wrong data.</string>
     <string name="Response500">Something went wrong.</string>
     <string name="UnknownServerError">Something went wrong.</string>
-    <string name="AnotherError">Error.</string>
+    <string name="AnotherError">Unknown error.</string>
+    <string name="IncorrectPassword">Incorrect password format</string>
+    <string name="IncorrectEmail">Incorrect email</string>
+    <string name="PasswordDoNotMatch">Passwords do not match</string>
 </resources>

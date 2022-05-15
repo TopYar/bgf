@@ -1,0 +1,1 @@
+DROP FUNCTION subscribe_to_user (integer, integer);

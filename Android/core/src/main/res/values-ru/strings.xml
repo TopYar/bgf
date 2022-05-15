@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="InternetException">Что-то пошло не так. Пожалуйста, проверьте подключение к интернету.</string>
+    <string name="Response422">Неверные данные</string>
     <string name="Response500">Что-то пошло не так.</string>
     <string name="UnknownServerError">Что-то пошло не так.</string>
     <string name="AnotherError">Неизвестная ошибка.</string>
+    <string name="IncorrectPassword">евеный формат пароля</string>
+    <string name="IncorrectEmail">Неверный формат электронной почты</string>
+    <string name="PasswordDoNotMatch">Пароли не сопадают</string>
 </resources>

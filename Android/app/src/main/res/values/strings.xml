@@ -8,9 +8,9 @@
     <string name="icon" translatable="false">icon</string>
     <string name="Welcome">Welcome</string>
     <string name="Back">Back</string>
-    <string name="Email">email</string>
-    <string name="Password">password</string>
-    <string name="ConfirmPassword">confirm password</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
+    <string name="ConfirmPassword">Confirm password</string>
     <string name="ForgotPassword">Forgot password?</string>
     <string name="LogIn">Log in</string>
     <string name="SignUp">Sign up</string>
@@ -32,9 +32,22 @@
     <string name="next_time_in">next time in 10 seconds</string>
     <string name="resend_code">Resend code</string>
     <string name="profile_picture">profile picture</string>
-    <string name="games_in_collection">Games in collection</string>
+    <string name="games_in_collection">Collection</string>
     <string name="following">Following</string>
     <string name="followers">Followers</string>
     <string name="events">Events</string>
     <string name="follow">Follow</string>
+    <string name="more_icon" translatable="false">more icon</string>
+    <string name="like_icon" translatable="false">like icon</string>
+    <string name="join">Join</string>
+    <string name="requested">Requested</string>
+    <string name="leave">Leave</string>
+    <string name="events_feed">Events feed</string>
+    <string name="my_events">My events</string>
+    <string name="user_already_exists">Such user already exists</string>
+    <string name="wrong_email_password">Wrong email or password</string>
+    <string name="create_event">Create event</string>
+    <string name="event_title">Event title</string>
+    <string name="members">Members</string>
+    <string name="create">Create</string>
 </resources>

@@ -1,0 +1,10 @@
+ALTER TABLE users
+DROP COLUMN name,
+DROP COLUMN nickname,
+DROP COLUMN city,
+DROP COLUMN country,
+DROP COLUMN rating,
+DROP COLUMN image_url,
+DROP COLUMN subscribers_count,
+DROP COLUMN subscriptions_count,
+DROP COLUMN games_count;

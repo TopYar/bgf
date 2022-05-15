@@ -5,7 +5,16 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func CreateJWT(claims *jwt.MapClaims) (string, error) {
+type JwtClaims struct {
+	jwt.StandardClaims
+	IssuedAt  int64  `json:"iat"`
+	ExpiresAt int64  `json:"exp"`
+	Type      string `json:"type"`
+	UserId    int    `json:"userId"`
+	SessionId string `json:"sessionId,omitempty"`
+}
+
+func CreateJWT(claims *JwtClaims) (string, error) {
 	// Create the token
 	token := jwt.New(jwt.SigningMethodHS256)
 	// Set some claims
@@ -15,8 +24,8 @@ func CreateJWT(claims *jwt.MapClaims) (string, error) {
 	return tokenString, err
 }
 
-func VerifyJWT(token string) (jwt.MapClaims, bool) {
-	claims := &jwt.MapClaims{}
+func VerifyJWT(token string) (*JwtClaims, bool) {
+	claims := &JwtClaims{}
 	tokenResult, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(ServerConfig.JWTSecretKey), nil
 	})
@@ -25,5 +34,5 @@ func VerifyJWT(token string) (jwt.MapClaims, bool) {
 		return nil, false
 	}
 
-	return *claims, true
+	return claims, true
 }

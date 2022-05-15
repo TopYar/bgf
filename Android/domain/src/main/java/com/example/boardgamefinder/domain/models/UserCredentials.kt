@@ -1,18 +1,26 @@
 package com.example.boardgamefinder.domain.models
 
+import com.example.boardgamefinder.domain.exceptions.EmailValidationException
+import com.example.boardgamefinder.domain.exceptions.PasswordMatchException
 import com.example.boardgamefinder.domain.exceptions.PasswordValidationException
-import com.example.boardgamefinder.domain.utils.PasswordValidator
+import com.example.boardgamefinder.domain.utils.CredentialsValidator
 
 /**
  * A class for storing and validating user credentials
  */
-data class UserCredentials(private val email: Email, private val password: Password) {
-    fun validate(passwordValidator: PasswordValidator): Result<Boolean> {
+data class UserCredentials(val email: Email, val password: Password, val passwordConf: Password) {
+    //ToDo move to usecase
+    fun validate(credentialsValidator: CredentialsValidator): Result<String> {
+        if(password != passwordConf)
+            return Result.failure(PasswordMatchException())
+        // validates email
+        if (!credentialsValidator.validateEmail(email.value))
+            return Result.failure(EmailValidationException())
         // validates password
-        if (!passwordValidator.validate(password.value))
+        if (!credentialsValidator.validatePassword(password.value))
             return Result.failure(PasswordValidationException())
         // success validation
-        return Result.success(true)
+        return Result.success("")
     }
 }
 

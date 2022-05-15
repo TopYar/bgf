@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+
+            <item android:top="10dp" android:gravity="center_horizontal|top">
+                <shape>
+                    <solid android:color="#FFFFFF"/>
+                    <size android:width="56dp" android:height="55dp"/>
+                </shape>
+            </item>
+
+            <item android:drawable="@drawable/ic_marker_primary"
+                android:height="100dp" android:width="80dp"/>
+
+            <item android:drawable="@drawable/ic_dice_primary"
+                android:top="17dp" android:width="35dp" android:height="35dp" android:gravity="center_horizontal|top">
+            </item>
+
+        </layer-list>
+    </item>
+</selector>

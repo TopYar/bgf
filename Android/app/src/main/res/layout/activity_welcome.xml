@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.views.WelcomeActivity"
+    tools:context=".presentation.views.activities.WelcomeActivity"
     android:background="?colorPrimary">
 
     <androidx.constraintlayout.widget.Guideline
@@ -108,7 +108,7 @@
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/signupButton"
+        android:id="@+id/exploreButton"
         style="@style/Widget.BoardGameFinder.Button.OutlinedButtonOnPrimary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

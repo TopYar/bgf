@@ -12,4 +12,10 @@
     <color name="orange300">#EDB156</color>
     <color name="orange500">#E7911E</color>
     <color name="orange100">#F7DDB4</color>
+
+    <color name="gray">#C4C4C4</color>
+    <color name="dark_gray">#8E8E8E</color>
+    <color name="light_gray">#EBEBEB</color>
+
+    <color name="heart">#CE6262</color>
 </resources>

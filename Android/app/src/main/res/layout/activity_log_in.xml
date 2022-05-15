@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.views.LogInActivity">
+    tools:context=".presentation.views.activities.LogInActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left"
@@ -21,20 +21,6 @@
         app:layout_constraintGuide_percent="0.9" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_left_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.15" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_right_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.85" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_icon_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.12" />
+        app:layout_constraintGuide_begin="88dp" />
 
     <!-- Dice icon -->
 
@@ -95,8 +81,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right_input"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left_input"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+        app:layout_constraintStart_toStartOf="@+id/guideline_left"
         app:layout_constraintTop_toBottomOf="@+id/textViewBack">
 
         <!-- Email -->
@@ -160,7 +146,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="25dp">
     
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginButton"
@@ -176,7 +162,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="3dp"
+                android:layout_height="2dp"
                 android:layout_weight="45"
                 android:background="@drawable/rounded_layout_bg"
                 android:layout_gravity="center"/>
@@ -191,7 +177,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="3dp"
+                android:layout_height="2dp"
                 android:layout_weight="45"
                 android:background="@drawable/rounded_layout_bg"
                 android:layout_gravity="center"/>

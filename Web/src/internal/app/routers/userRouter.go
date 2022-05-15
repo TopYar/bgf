@@ -1,17 +1,17 @@
 package routers
 
 import (
-	"bgf/internal/app/model"
+	. "bgf/configs"
+	"bgf/internal/app/models"
 	"bgf/internal/app/store"
 	"bgf/internal/app/store/sqlstore"
 	. "bgf/utils"
+	"bgf/utils/ctxkey"
 	"encoding/json"
 	"errors"
-	"github.com/golang-jwt/jwt"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
-
-	"github.com/gorilla/mux"
 )
 
 var (
@@ -22,10 +22,10 @@ var (
 type userRouter struct {
 	router    *mux.Router
 	store     *sqlstore.Store
-	responder HttpResponder
+	responder HttpController
 }
 
-func NewUserRouter(router *mux.Router, store *sqlstore.Store, responder HttpResponder) BaseRouter {
+func NewUserRouter(router *mux.Router, store *sqlstore.Store, responder HttpController) BaseRouter {
 	userrouter := &userRouter{
 		router:    router,
 		store:     store,
@@ -39,9 +39,15 @@ func NewUserRouter(router *mux.Router, store *sqlstore.Store, responder HttpResp
 
 func (self *userRouter) ConfigureRouter() {
 	self.router.HandleFunc("", self.handleUserCreate()).Methods("POST")
-	self.router.HandleFunc("/confirm", self.handleUserConfirm()).Methods("PUT")
-	self.router.HandleFunc("/find", self.handleUserFindByEmail()).Methods("GET")
-	self.router.HandleFunc("/{id}", self.handleUserFindById()).Methods("GET")
+
+	confirmRouter := self.router.PathPrefix("/confirm").Subrouter()
+	confirmRouter.Use(self.responder.GetAuthorizeMw(true, "confirmation"))
+	confirmRouter.HandleFunc("", self.handleUserConfirm()).Methods("PUT")
+
+	getRouter := self.router.PathPrefix("").Subrouter()
+	getRouter.Use(self.responder.GetAuthorizeMw(true, "access"))
+	getRouter.HandleFunc("", self.handleGetUser()).Methods("GET")
+	getRouter.HandleFunc("/find", self.handleUserFindByEmail()).Methods("GET")
 }
 
 func (self *userRouter) handleUserCreate() http.HandlerFunc {
@@ -57,7 +63,7 @@ func (self *userRouter) handleUserCreate() http.HandlerFunc {
 			return
 		}
 
-		user := &model.User{
+		user := &models.User{
 			Email:    request.Email,
 			Password: request.Password,
 		}
@@ -66,6 +72,7 @@ func (self *userRouter) handleUserCreate() http.HandlerFunc {
 			self.responder.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
+		_ = self.store.UserRepo().SetDefaultNickname(user)
 
 		user.Sanitize()
 
@@ -76,30 +83,40 @@ func (self *userRouter) handleUserCreate() http.HandlerFunc {
 			return
 		}
 
-		code := model.CreateConfirmationCode(user.Id, codeSequence)
+		code := models.CreateConfirmationCode(user.Id, codeSequence)
 
 		if err := self.store.CofirmationCodeRepo().Create(code); err != nil {
 			self.responder.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
-		//SendMail([]string{user.Email}, "Confirmation code", code.Code)
-
-		claims := &jwt.MapClaims{
-			"data": map[string]interface{}{
-				"sessionId": "1",
-				"userId":    user.Id,
-			},
-		}
-
-		jwt, err := CreateJWT(claims)
+		body, err := RenderTemplate("mail", map[string]interface{}{"code": code.Code})
 
 		if err != nil {
 			self.responder.Error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		self.responder.Respond(w, r, http.StatusCreated, jwt)
+		if err := SendMail(user.Email, "Confirmation code", body); err != nil {
+			self.responder.Error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		claims := &JwtClaims{
+			UserId: user.Id,
+			Type:   "confirmation",
+		}
+
+		jwtToken, err := createJwt(claims, ServerConfig.ConfirmationCodeExpiration)
+
+		if err != nil {
+			self.responder.Error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		self.responder.Respond(w, r, http.StatusCreated, map[string]string{
+			"token": jwtToken,
+		})
 	}
 }
 
@@ -109,45 +126,35 @@ func (self *userRouter) handleUserConfirm() http.HandlerFunc {
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		token, isValid := VerifyJWT(r.Header.Get("jwt"))
-
-		if !isValid {
-			self.responder.Error(w, r, http.StatusUnauthorized, errors.New("not valid jwt"))
-			return
-		}
-
 		request := &request{}
 		if err := json.NewDecoder(r.Body).Decode(request); err != nil {
 			self.responder.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
+		var user = r.Context().Value(ctxkey.CtxUser).(*models.User)
 
-		data := token["data"].(map[string]interface{})
-		userId := data["userId"].(string)
-
-		code, err := self.store.CofirmationCodeRepo().FindByUserId(userId)
+		code, err := self.store.CofirmationCodeRepo().FindByUserId(user.Id)
 
 		if err != nil {
-			self.responder.Error(w, r, http.StatusUnprocessableEntity, err)
+			self.responder.Error(w, r, http.StatusNotFound, err)
 			return
 		}
 
 		if code.Code != request.Code {
-			self.responder.Error(w, r, http.StatusUnauthorized, errors.New("code is not valid"))
+			self.responder.Error(w, r, http.StatusUnprocessableEntity, errors.New("code is not valid"))
 			return
 		}
 
-		if _, err := self.store.CofirmationCodeRepo().DeleteAllUserCodes(userId); err != nil {
-			self.responder.Error(w, r, http.StatusInternalServerError, errors.New("can't delete codes"))
+		// Create session
+		session, err := self.store.SessionRepo().New(user.Id)
+		if err != nil {
+			self.responder.Error(w, r, http.StatusInternalServerError, errFailCreateSession)
 			return
 		}
 
-		claims := &jwt.MapClaims{
-			"data": map[string]interface{}{
-				// TODO: припилить сессии
-				"sessionId": "1",
-				"userId":    userId,
-			},
+		claims := &JwtClaims{
+			SessionId: session.Id,
+			UserId:    user.Id,
 		}
 
 		accessToken, refreshToken, err := createJwtPair(claims)
@@ -155,6 +162,11 @@ func (self *userRouter) handleUserConfirm() http.HandlerFunc {
 		if err != nil {
 			self.responder.Error(w, r, http.StatusInternalServerError, err)
 			return
+		}
+
+		// Success => delete all codes, but in case of error - just log it
+		if err := self.store.CofirmationCodeRepo().DeleteAllUserCodes(user.Id); err != nil {
+			Logger.Error("Can't delete all codes")
 		}
 
 		self.responder.Respond(w, r, http.StatusAccepted, map[string]string{
@@ -166,19 +178,29 @@ func (self *userRouter) handleUserConfirm() http.HandlerFunc {
 
 func (self *userRouter) handleUserFindById() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		strId, ok := mux.Vars(r)["id"]
-		if !ok {
-			self.responder.Error(w, r, http.StatusUnprocessableEntity, errExpectedProfileID)
-			return
+
+	}
+}
+
+func (self *userRouter) handleGetUser() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()["id"]
+		currentUser := r.Context().Value(ctxkey.CtxUser).(*models.User)
+
+		var userId int
+		var err error
+
+		if len(query) == 0 {
+			userId = currentUser.Id
+		} else {
+			userId, err = strconv.Atoi(query[0])
+			if err != nil {
+				self.responder.Error(w, r, http.StatusBadRequest, errEventIdInvalid)
+				return
+			}
 		}
 
-		id, err := strconv.Atoi(strId)
-		if err != nil {
-			self.responder.Error(w, r, http.StatusUnprocessableEntity, err)
-			return
-		}
-
-		user, err := self.store.UserRepo().FindById(id)
+		user, err := self.store.UserRepo().FindByIdWithSubscriptions(currentUser.Id, userId)
 		if err != nil {
 			if err == store.ErrRecordNotFound {
 				self.responder.Respond(w, r, http.StatusNoContent, nil)
@@ -188,8 +210,7 @@ func (self *userRouter) handleUserFindById() http.HandlerFunc {
 			return
 		}
 
-		w.WriteHeader(http.StatusOK)
-		RenderJSON(w, user)
+		self.responder.Respond(w, r, http.StatusOK, user)
 	}
 }
 

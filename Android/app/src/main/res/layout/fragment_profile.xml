@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.views.ProfileFragment">
+    tools:context=".presentation.views.fragments.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -55,9 +55,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+            android:visibility="invisible"
+            android:id="@+id/logoutButton"
+            android:layout_marginStart="-18dp"
+            android:layout_marginTop="-18dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:contentDescription="@string/back_icon"
+            android:padding="18dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_logout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintTop_toTopOf="@+id/guidelineColorContent" />
+
         <ImageView
             android:id="@+id/profilePicture"
-            android:background="@color/white"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="1:1"
@@ -77,20 +93,14 @@
             app:layout_constraintTop_toTopOf="@+id/guidelineColorContent">
 
             <TextView
-                android:id="@+id/rating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="rating" />
-
-            <TextView
                 android:id="@+id/name"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="username"
                 android:textColor="?colorOnPrimary" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/city"
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:layout_width="match_parent"
@@ -101,16 +111,17 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="0dp"
-            android:layout_marginStart="15dp"
             android:layout_height="0dp"
+            android:layout_marginStart="15dp"
+            android:gravity="bottom"
             android:orientation="horizontal"
             android:weightSum="100"
             app:layout_constraintBottom_toTopOf="@+id/guidelineImageBottom"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toEndOf="@+id/profilePicture"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            android:gravity="bottom">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/followButton"
@@ -118,12 +129,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="50"
-                android:text="@string/follow" />
+                android:layout_weight="100"
+                android:text="@string/follow"
+                android:visibility="invisible"
+                android:enabled="false"/>
 
         </LinearLayout>
 
         <GridLayout
+            android:layout_marginBottom="10dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="-10dp"
@@ -132,7 +146,7 @@
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
             app:layout_constraintTop_toTopOf="@+id/guidelineImageBottom"
-            android:columnCount="3">
+            android:columnCount="2">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -142,6 +156,7 @@
                 android:gravity="bottom">
 
                 <TextView
+                    android:id="@+id/followers_text"
                     android:layout_width="match_parent"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
@@ -153,12 +168,11 @@
                     android:layout_width="match_parent"
                     android:gravity="center_horizontal"
                     android:layout_marginVertical="7dp"
-                    android:id="@+id/followers"
+                    android:id="@+id/followers_count"
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.MaterialComponents.Subtitle1"
                     android:textStyle="bold"
-                    android:textColor="?colorOnPrimary"
-                    android:text="0"/>
+                    android:textColor="?colorOnPrimary"/>
 
             </LinearLayout>
 
@@ -170,6 +184,7 @@
                 android:gravity="bottom">
 
                 <TextView
+                    android:id="@+id/following_text"
                     android:layout_width="match_parent"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
@@ -181,16 +196,15 @@
                     android:layout_width="match_parent"
                     android:gravity="center_horizontal"
                     android:layout_marginVertical="7dp"
-                    android:id="@+id/following"
+                    android:id="@+id/following_count"
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.MaterialComponents.Subtitle1"
                     android:textStyle="bold"
-                    android:textColor="?colorOnPrimary"
-                    android:text="0"/>
+                    android:textColor="?colorOnPrimary"/>
 
             </LinearLayout>
 
-            <LinearLayout
+            <!--LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -216,11 +230,13 @@
                     android:textColor="?colorOnPrimary"
                     android:text="0"/>
 
-            </LinearLayout>
+            </LinearLayout-->
 
         </GridLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:visibility="invisible"
+            android:enabled="false"
             android:id="@+id/eventsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

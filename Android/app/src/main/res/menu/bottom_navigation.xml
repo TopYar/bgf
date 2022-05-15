@@ -16,10 +16,10 @@
         android:icon="@drawable/ic_outline_add_circle"
         android:title="@string/CreateNavName"/>
 
-    <item
+    <!--item
         android:id="@+id/nav_notifications"
         android:icon="@drawable/ic_outline_notifications"
-        android:title="@string/EventsNavName"/>
+        android:title="@string/EventsNavName"/-->
 
     <item
         android:id="@+id/nav_profile"
